@@ -3,6 +3,8 @@
 require_once("includes/header.php");
 require_once("includes/classes/VideoPlayer.php");
 require_once("includes/classes/VideoInfoSection.php");
+require_once("includes/classes/CommentSection.php");
+require_once("includes/classes/Comment.php");
 
 if (!isset($_GET["id"])) {
     echo "No url passed into page";
@@ -15,6 +17,7 @@ $video->incrementViews();
 ?>
 
 <script src="assets/js/videoPlayerActions.js"></script>
+<script src="assets/js/commentActions.js"></script>
 
 <div class="watchLeftColumn">
 
@@ -24,6 +27,9 @@ $video->incrementViews();
 
     $videoInfoSection = new VideoInfoSection($con, $video, $userLoggedInObj);
     echo $videoInfoSection->create();
+
+    $commentSection = new CommentSection($con, $video, $userLoggedInObj);
+    echo $commentSection->create();
 ?>
 
 </div>
