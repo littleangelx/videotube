@@ -116,8 +116,6 @@ class Comment {
     }
 
     public function wasLikedBy() {
-        $id = $this->getId();
-        $username = $this->userLoggedInObj->getUsername();
         $query = $this->con->prepare("SELECT * FROM likes WHERE username=:username AND commentId=:commentId");
         $query->bindParam(":username", $username);
         $query->bindParam(":commentId", $id);
@@ -131,25 +129,22 @@ class Comment {
     }
 
     public function wasDislikedBy() {
-        $id = $this->getId();
-
-        $username = $this->userLoggedInObj->getUsername();
         $query = $this->con->prepare("SELECT * FROM dislikes WHERE username=:username AND commentId=:commentId");
         $query->bindParam(":username", $username);
         $query->bindParam(":commentId", $id);
 
-        
+        $id = $this->getId();
+
+        $username = $this->userLoggedInObj->getUsername();
         $query->execute();
 
         return $query->rowCount() > 0;
     }
 
     public function getLikes() {
-        $commentId = $this->getId();
-        
         $query = $this->con->prepare("SELECT count(*) as 'count' FROM likes WHERE commentId=:commentId");
         $query->bindParam(":commentId", $commentId);
-       
+        $commentId = $this->getId();
         $query->execute();
 
         $data = $query->fetch(PDO::FETCH_ASSOC);
@@ -240,7 +235,6 @@ class Comment {
 
         return $comments;
     }
-
 
 }
 ?>

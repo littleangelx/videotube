@@ -1,6 +1,6 @@
 <?php
-
 class ButtonProvider {
+
     public static $signInFunction = "notSignedIn()";
 
     public static function createLink($link) {
@@ -8,21 +8,22 @@ class ButtonProvider {
     }
 
     public static function createButton($text, $imageSrc, $action, $class) {
+
         $image = ($imageSrc == null) ? "" : "<img src='$imageSrc'>";
 
-        $action = ButtonProvider::createLink($action);
+        $action  = ButtonProvider::createLink($action);
 
-        return  "<button class='$class' onclick='$action'>
+        return "<button class='$class' onclick='$action'>
                     $image
                     <span class='text'>$text</span>
                 </button>";
     }
 
     public static function createHyperlinkButton($text, $imageSrc, $href, $class) {
+
         $image = ($imageSrc == null) ? "" : "<img src='$imageSrc'>";
 
-
-        return  "<a href='$href'>
+        return "<a href='$href'>
                     <button class='$class'>
                         $image
                         <span class='text'>$text</span>
@@ -37,9 +38,9 @@ class ButtonProvider {
 
         return "<a href='$link'>
                     <img src='$profilePic' class='profilePicture'>
-               </a>";
+                </a>";
     }
-
+    
     public static function createEditVideoButton($videoId) {
         $href = "editVideo.php?videoId=$videoId";
 
@@ -49,7 +50,7 @@ class ButtonProvider {
                     $button
                 </div>";
     }
-
+    
     public static function createSubscriberButton($con, $userToObj, $userLoggedInObj) {
         $userTo = $userToObj->getUsername();
         $userLoggedIn = $userLoggedInObj->getUsername();
@@ -67,16 +68,17 @@ class ButtonProvider {
                     $button
                 </div>";
     }
-
+    
     public static function createUserProfileNavigationButton($con, $username) {
-        if (User::isLoggedIn()) {
+        if(User::isLoggedIn()) {
             return ButtonProvider::createUserProfileButton($con, $username);
-        } else {
-            return "<a href='signin.php'>
-                        <span class='signinLink'>SIGN IN</span>
+        }
+        else {
+            return "<a href='signIn.php'>
+                        <span class='signInLink'>SIGN IN</span>
                     </a>";
         }
     }
-}
 
+}
 ?>

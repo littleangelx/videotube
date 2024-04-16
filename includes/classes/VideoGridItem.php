@@ -1,10 +1,9 @@
 <?php
-
 class VideoGridItem {
+
     private $video, $largeMode;
 
-    public function __construct($video, $largeMode)
-    {
+    public function __construct($video, $largeMode) {
         $this->video = $video;
         $this->largeMode = $largeMode;
     }
@@ -22,8 +21,8 @@ class VideoGridItem {
                 </a>";
     }
 
-    public function createThumbnail() {
-       
+    private function createThumbnail() {
+        
         $thumbnail = $this->video->getThumbnail();
         $duration = $this->video->getDuration();
 
@@ -36,35 +35,34 @@ class VideoGridItem {
 
     }
 
-    public function createDetails() {
-       $title = $this->video->getTitle();
-       $username = $this->video->getUploadedBy();
-       $description = $this->createDescription();
-       $views = $this->video->getViews();
-       $timestamp = $this->video->getTimestamp();
+    private function createDetails() {
+        $title = $this->video->getTitle();
+        $username = $this->video->getUploadedBy();
+        $views = $this->video->getViews();
+        $description = $this->createDescription();
+        $timestamp = $this->video->getTimeStamp();
 
-       return "<div class='details'>
+        return "<div class='details'>
                     <h3 class='title'>$title</h3>
                     <span class='username'>$username</span>
                     <div class='stats'>
                         <span class='viewCount'>$views views - </span>
-                        <span class='timestamp'>$timestamp</span>
+                        <span class='timeStamp'>$timestamp</span>
                     </div>
                     $description
                 </div>";
     }
 
     private function createDescription() {
-        if (!$this->largeMode) {
+        if(!$this->largeMode) {
             return "";
-        } else {
+        }
+        else {
             $description = $this->video->getDescription();
             $description = (strlen($description) > 350) ? substr($description, 0, 347) . "..." : $description;
             return "<span class='description'>$description</span>";
         }
-        
     }
 
 }
-
 ?>

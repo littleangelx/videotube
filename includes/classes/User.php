@@ -38,8 +38,8 @@ class User {
     }
 
     public function getProfilePic() {
-        return $this->sqlData["profilePic"];
-    }
+    return User::isLoggedIn() ? $this->sqlData["profilePic"] : "";
+}
 
     public function getSignUpDate() {
         return $this->sqlData["signUpDate"];
@@ -48,16 +48,16 @@ class User {
     public function isSubscribedTo($userTo) {
         $query = $this->con->prepare("SELECT * FROM subscribers WHERE userTo=:userTo AND userFrom=:userFrom");
         $query->bindParam(":userTo", $userTo);
-        $query->bindParam(":userFrom", $username);
         $username = $this->getUsername();
+        $query->bindParam(":userFrom", $username);
         $query->execute();
         return $query->rowCount() > 0;
     }
 
     public function getSubscriberCount() {
         $query = $this->con->prepare("SELECT * FROM subscribers WHERE userTo=:userTo");
-        $query->bindParam(":userTo", $username);
         $username = $this->getUsername();
+        $query->bindParam(":userTo", $username);
         $query->execute();
         return $query->rowCount();
     }

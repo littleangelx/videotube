@@ -1,28 +1,27 @@
-<?php 
-
+<?php
 class VideoGrid {
+
     private $con, $userLoggedInObj;
     private $largeMode = false;
     private $gridClass = "videoGrid";
 
-    public function __construct($con, $userLoggedInObj) 
-    {
-     $this->con = $con;
-     $this->userLoggedInObj = $userLoggedInObj;   
+    public function __construct($con, $userLoggedInObj) {
+        $this->con = $con;
+        $this->userLoggedInObj = $userLoggedInObj;
     }
 
     public function create($videos, $title, $showFilter) {
 
-        if ($videos == null) {
+        if($videos == null) {
             $gridItems = $this->generateItems();
-        } else {
+        }
+        else {
             $gridItems = $this->generateItemsFromVideos($videos);
-
         }
 
         $header = "";
 
-        if ($title != null) {
+        if($title != null) {
             $header = $this->createGridHeader($title, $showFilter);
         }
 
@@ -31,13 +30,14 @@ class VideoGrid {
                     $gridItems
                 </div>";
     }
-
+    
     public function generateItems() {
         $query = $this->con->prepare("SELECT * FROM videos ORDER BY RAND() LIMIT 15");
         $query->execute();
-
+        
         $elementsHtml = "";
-        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+        while($row = $query->fetch(PDO::FETCH_ASSOC)) {
+
             $video = new Video($this->con, $row, $this->userLoggedInObj);
             $item = new VideoGridItem($video, $this->largeMode);
             $elementsHtml .= $item->create();
@@ -56,43 +56,44 @@ class VideoGrid {
 
         return $elementsHtml;
     }
-
+    
     public function createGridHeader($title, $showFilter) {
-       $filter = "";
+        $filter = "";
 
-        if ($showFilter) {
+        if($showFilter) {
             $link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            
             $urlArray = parse_url($link);
             $query = $urlArray["query"];
 
             parse_str($query, $params);
 
             unset($params["orderBy"]);
-
+            
             $newQuery = http_build_query($params);
-            $newUrl = basename($_SERVER["PHP_SELF"]) . "?" . $newQuery;
 
+            $newUrl = basename($_SERVER["PHP_SELF"]) . "?" . $newQuery;
+           
             $filter = "<div class='right'>
-                        <span>Order by:</span>
-                        <a href='$newUrl&orderBy=uploadDate'>Upload date</a>
-                        <a href='$newUrl&orderBy=views'>Most viewed</a>
-                    </div>";
+                            <span>Order by:</span>
+                            <a href='$newUrl&orderBy=uploadDate'>Upload date</a>
+                            <a href='$newUrl&orderBy=views'>Most viewed</a>
+                        </div>";
         }
 
-       $header = "<div class='videoGridHeader'>
-                    <div class='left'>
-                        $title
-                    </div>
-                    $filter
-                 </div>";
-        return $header;
+        return "<div class='videoGridHeader'>
+                        <div class='left'>
+                            $title
+                        </div>
+                        $filter
+                    </div>";
     }
 
     public function createLarge($videos, $title, $showFilter) {
-        $this->gridClass .=  " large";
+        $this->gridClass .= " large";
         $this->largeMode = true;
         return $this->create($videos, $title, $showFilter);
     }
-}
 
+}
 ?>

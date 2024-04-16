@@ -1,18 +1,23 @@
-<?php require_once("includes/header.php") ?>
+<?php require_once("includes/header.php"); ?>
 
 <div class="videoSection">
+    <?php
 
-    <?php 
-        $subscriptionsProvider = new SubscriptionsProvider($con, $userLoggedInObj);
-        $subscriptionVideos = $subscriptionsProvider->getVideos();
+    $subscriptionsProvider = new SubscriptionsProvider($con, $userLoggedInObj);
+    $subscriptionVideos = $subscriptionsProvider->getVideos();
 
-        $videoGrid = new VideoGrid($con, $userLoggedInObj->getUsername());
+    $videoGrid = new VideoGrid($con, $userLoggedInObj->getUsername());
 
-        if (User::isLoggedIn() && isset($subscriptionVideos[0])) {
-            echo $videoGrid->create($subscriptionVideos, "Subscriptions", false);
-        }
+    if(User::isLoggedIn() && sizeof($subscriptionVideos) > 0) {
+        echo $videoGrid->create($subscriptionVideos, "Subscriptions", false);
+    }
 
-        echo $videoGrid->create(null, "Recommended", false);
+    echo $videoGrid->create(null, "Recommended", false);
+
+
     ?>
+</div>
 
-<?php require_once("includes/footer.php") ?>
+
+<?php require_once("includes/footer.php"); ?>
+                
